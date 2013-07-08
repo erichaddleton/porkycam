@@ -19,16 +19,6 @@
         android:text="Eat the Pork!" />
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="Porky would like to remind you that he is not a cannibal. Any injuries sustained while using this crappy application are entirely your own problem."
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,5 +27,14 @@
         android:layout_marginTop="20dp"
         android:text="I&apos;m going to eat you... I really am a cannibal. Dennis the deer is too."
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:text="Start" />
 
 </RelativeLayout>
