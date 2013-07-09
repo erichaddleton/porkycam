@@ -8,16 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="154dp"
-        android:onClick="startCamera"
-        android:text="Eat the Pork!" />
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -27,14 +17,14 @@
         android:layout_marginTop="20dp"
         android:text="I&apos;m going to eat you... I really am a cannibal. Dennis the deer is too."
         android:textAppearance="?android:attr/textAppearanceSmall" />
-
     <ToggleButton
         android:id="@+id/toggleButton1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button1"
+        android:layout_below="@+id/toggleButton1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
-        android:text="Start" />
-
+        android:layout_marginTop="53dp"
+        android:text="Start" 
+        android:onClick="onToggleClick"/>
+        
 </RelativeLayout>
