@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="I&apos;m going to eat you... I really am a cannibal. Dennis the deer is too."
+        android:text=""
         android:textAppearance="?android:attr/textAppearanceSmall" />
     <ToggleButton
         android:id="@+id/toggleButton1"
