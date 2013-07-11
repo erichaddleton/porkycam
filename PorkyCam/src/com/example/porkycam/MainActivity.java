@@ -1,17 +1,21 @@
 package com.example.porkycam;
 
+import java.io.File;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.Activity;
+import android.content.*;
 import android.hardware.Camera;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -39,12 +43,29 @@ public class MainActivity extends Activity {
 		hButton = (Button)findViewById(R.id.toggleButton1);
 	}
 	
+	//Get instance of camera object
+	public static Camera getCameraInstance() {
+		Camera c =null;
+		try {
+			c = Camera.open(); //attempt to get instance
+		}
+		catch (Exception e) {
+			// Cam unavailable
+		}
+		return c; //return null if unavailable
+	}
+	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+    
+    /*public void startCamera(View view) {
+    	Intent intent = new Intent(this, CameraOn.class);
+    	startActivity(intent);
+    }*/
     
     public void onToggleClick(View view){
         // Is the toggle on?
@@ -65,7 +86,8 @@ public class MainActivity extends Activity {
     				public void run() {
     					nCounter++;
     					shootSound();
-    				
+    					dispatchTakePictureIntent(2);
+    					
     					//update TextView
     					if (hTextView != null) {
     						hTextView.setText("Porks eaten: " + nCounter);
@@ -104,7 +126,39 @@ getBaseContext().getSystemService(Context.AUDIO_SERVICE);
     				if (_shootMP != null)
     					_shootMP.start();
     			}
+    			
+    			//dispatchTakePictureIntent(11);
     		}
+    		
+    		private void dispatchTakePictureIntent(int actionCode) {
+    			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    			//File f = getOutputMediaFile(1);
+    			//takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+    			startActivityForResult(takePictureIntent, actionCode);
+    		}
+    		
+    		/* private static File getOutputMediaFile(int type){
+    			
+    			File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "PorkyCam");
+    			
+    			if (! mediaStorageDir.exists()){
+    				if (! mediaStorageDir.mkdirs()){
+    					Log.d("PorkyCam", "failed to create directory");
+    					return null;
+    				}
+    			}
+    			
+    			//File name
+    			String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date(type));
+    			File mediaFile;
+    			if (type == 1){
+    				mediaFile = new File(mediaStorageDir.getPath() + File.separator + "SPACE_" + timeStamp + ".jpg");
+    			} else {
+    				return null;
+    			}
+    			
+    			return mediaFile;
+    		}*/
     }
 
     
