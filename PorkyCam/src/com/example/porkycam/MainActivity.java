@@ -132,12 +132,12 @@ getBaseContext().getSystemService(Context.AUDIO_SERVICE);
     		
     		private void dispatchTakePictureIntent(int actionCode) {
     			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    			//File f = getOutputMediaFile(1);
-    			//takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+    			File f = getOutputMediaFile(1);
+    			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
     			startActivityForResult(takePictureIntent, actionCode);
     		}
     		
-    		/* private static File getOutputMediaFile(int type){
+    		public static File getOutputMediaFile(int type){
     			
     			File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "PorkyCam");
     			
@@ -153,12 +153,17 @@ getBaseContext().getSystemService(Context.AUDIO_SERVICE);
     			File mediaFile;
     			if (type == 1){
     				mediaFile = new File(mediaStorageDir.getPath() + File.separator + "SPACE_" + timeStamp + ".jpg");
+    				Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        		    Uri contentUri = Uri.fromFile(mediaFile);
+        		    mediaScanIntent.setData(contentUri);
+        		    //this.sendBroadcast(mediaScanIntent);
     			} else {
     				return null;
     			}
     			
     			return mediaFile;
-    		}*/
+    		}
+    		
     }
 
     
