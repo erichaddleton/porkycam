@@ -126,15 +126,6 @@ getBaseContext().getSystemService(Context.AUDIO_SERVICE);
     				if (_shootMP != null)
     					_shootMP.start();
     			}
-    			
-    			//dispatchTakePictureIntent(11);
-    		}
-    		
-    		private void dispatchTakePictureIntent(int actionCode) {
-    			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    			File f = getOutputMediaFile(1);
-    			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-    			startActivityForResult(takePictureIntent, actionCode);
     		}
     		
     		public static File getOutputMediaFile(int type){
@@ -162,6 +153,12 @@ getBaseContext().getSystemService(Context.AUDIO_SERVICE);
     			}
     			
     			return mediaFile;
+    		}
+    		
+    		protected void dispatchTakePictureIntent(int actionCode) {
+    			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    			//takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mediaFile));
+    			startActivityForResult(takePictureIntent, actionCode);
     		}
     		
     }
