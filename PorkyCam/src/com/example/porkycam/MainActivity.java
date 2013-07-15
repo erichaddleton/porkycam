@@ -1,9 +1,6 @@
 package com.example.porkycam;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Timer;
@@ -12,7 +9,6 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.*;
 import android.hardware.Camera;
-import android.hardware.Camera.ShutterCallback;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -27,7 +23,6 @@ import android.widget.Button;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-import android.hardware.Camera.PictureCallback;
 
 public class MainActivity extends Activity {
 	
@@ -39,7 +34,6 @@ public class MainActivity extends Activity {
 	Button hButton, hButtonStop;
 	private int nCounter = 0;
 	MediaPlayer _shootMP = null;
-	Camera camera;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +86,7 @@ public class MainActivity extends Activity {
     				public void run() {
     					nCounter++;
     					shootSound();
-    					//dispatchTakePictureIntent(2);
-    					camera.takePicture(shutterCallback, jpegCallback, rawCallback);
+    					dispatchTakePictureIntent(2);
     					
     					//update TextView
     					if (hTextView != null) {
@@ -135,43 +128,7 @@ getBaseContext().getSystemService(Context.AUDIO_SERVICE);
     			}
     		}
     		
-    		ShutterCallback shutterCallback = new ShutterCallback() {
-    			public void onShutter() {
-    				// Log.d(TAG, "onShutter'd");
-    			}
-    		};
-    		
-    		PictureCallback rawCallback = new PictureCallback() {
-    			public void onPictureTaken(byte[] data, Camera camera) {
-    				// Log.d(TAG, "onPictureTaken - raw");
-    			}
-    		};
-    		
-    		File fileName;
-    		
-			PictureCallback jpegCallback = new PictureCallback() {
-					public void onPictureTaken(byte[] data, Camera camera) {
-								FileOutputStream outStream = null;
-									try {
-										// Write to SD Card
-										fileName = Environment.getExternalStorageDirectory();
-										outStream = new FileOutputStream(fileName);
-										outStream.write(data);
-										outStream.close();
-										Log.d("PorkyCam", "onPictureTaken - wrote bytes: " + data.length);
-
-										} catch (FileNotFoundException e) {
-											e.printStackTrace();
-										} catch (IOException e) {
-											e.printStackTrace();
-										} finally {
-										}
-										Log.d("PorkyCam", "onPictureTaken - jpeg");
-						}
-
-    		/*public static File getOutputMediaFile(int type){
-    			
-    			
+    		public static File getOutputMediaFile(int type){
     			
     			File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "PorkyCam");
     			
@@ -202,9 +159,9 @@ getBaseContext().getSystemService(Context.AUDIO_SERVICE);
     			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     			//takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mediaFile));
     			startActivityForResult(takePictureIntent, actionCode);
-    		}*/
+    		}
     		
-    };}
+    }
 
     
 
