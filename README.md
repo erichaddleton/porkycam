@@ -1,4 +1,5 @@
-#PorkyCam
+*This application is a work in progress...*
+##PorkyCam
 
 - An Android application being developed for use on a space balloon.
 - The application will take pictures every 10 seconds and save them to the SD card. Controlled by a timer (via ToggleButton)
