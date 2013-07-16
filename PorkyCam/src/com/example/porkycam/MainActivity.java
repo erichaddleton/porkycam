@@ -16,7 +16,6 @@ import android.hardware.Camera.PictureCallback;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -88,7 +87,7 @@ public class MainActivity extends Activity {
 
 	        File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
 	        if (pictureFile == null){
-	            //Log.d("PorkyCam", "Error creating media file, check storage permissions: " + e.getMessage());
+	            Log.d("PorkyCam", "Error creating media file, check storage permissions: ");
 	            return;
 	        }
 
@@ -180,7 +179,7 @@ getBaseContext().getSystemService(Context.AUDIO_SERVICE);
     		            return null;
     		        }
     		    }
-
+    		    
     		    // Create a media file name
     		    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date(type));
     		    File mediaFile;
@@ -193,35 +192,6 @@ getBaseContext().getSystemService(Context.AUDIO_SERVICE);
 
     		    return mediaFile;
     		}
-    		
-    		/*public static File getOutputMediaFile(int type){
-    			
-    			File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "PorkyCam");
-    			
-    			if (! mediaStorageDir.exists()){
-    				if (! mediaStorageDir.mkdirs()){
-    					Log.d("PorkyCam", "failed to create directory");
-    					return null;
-    				}
-    			}
-    			
-    			//File name
-    			String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date(type));
-    			File mediaFile;
-    			if (type == 1){
-    				mediaFile = new File(mediaStorageDir.getPath() + File.separator + "SPACE_" + timeStamp + ".jpg");
-    				Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        		    Uri contentUri = Uri.fromFile(mediaFile);
-        		    mediaScanIntent.setData(contentUri);
-        		    //this.sendBroadcast(mediaScanIntent);
-    			} else {
-    				return null;
-    			}
-    			
-    			return mediaFile;
-    		}*/
-    		
-    		
     }
 
     
