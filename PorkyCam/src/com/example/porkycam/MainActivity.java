@@ -1,9 +1,6 @@
 package com.example.porkycam;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Timer;
@@ -25,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
@@ -36,6 +34,7 @@ public class MainActivity extends Activity {
 	TableRow hTableRow;
 	Button hButton, hButtonStop;
 	private int nCounter = 0;
+	public static int fileCount = 0;
 	MediaPlayer _shootMP = null;
 	private Camera mCamera;
 	
@@ -80,26 +79,10 @@ public class MainActivity extends Activity {
     }
     
     private PictureCallback mPicture = new PictureCallback() {
-
-	    
 		@Override
 	    public void onPictureTaken(byte[] data, Camera camera) {
-
-	        File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-	        if (pictureFile == null){
-	            Log.d("PorkyCam", "Error creating media file, check storage permissions: ");
-	            return;
-	        }
-
-	        try {
-	            FileOutputStream fos = new FileOutputStream(pictureFile);
-	            fos.write(data);
-	            fos.close();
-	        } catch (FileNotFoundException e) {
-	            Log.d("PorkyCam", "File not found: " + e.getMessage());
-	        } catch (IOException e) {
-	            Log.d("PorkyCam", "Error accessing file: " + e.getMessage());
-	        }
+			Toast.makeText(getApplicationContext(), "picture taken", Toast.LENGTH_SHORT).show();
+	        galleryAddPic();
 	    }
 	};
    
@@ -111,6 +94,7 @@ public class MainActivity extends Activity {
     			handler.post(new Runnable() {
     				public void run() {
     					nCounter++;
+    					fileCount++;
     					shootSound();
     					mCamera.takePicture(null, null, mPicture);
     					
@@ -125,7 +109,7 @@ public class MainActivity extends Activity {
     			});		
     		}};
     		
-    	t.schedule(mTimerTask,  500,10000);
+    	t.schedule(mTimerTask,500,10000);
     }
     	
     public void stopTask(){
@@ -156,20 +140,13 @@ public class MainActivity extends Activity {
     }
     		
     public static final int MEDIA_TYPE_IMAGE = 1;
+   
+    
 
-    /** Create a file Uri for saving an image or video */
-  	private static Uri getOutputMediaFileUri(int type){
-  		return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-    /** Create a File for saving an image or video */
+    // Create a File for saving an image or video
     private static File getOutputMediaFile(int type){
-    // To be safe, you should check that the SDCard is mounted
-    // using Environment.getExternalStorageState() before doing this.
-
+  
     	File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "PorkyCam");
-    	// This location works best if you want the created images to be shared
-    	// between applications and persist after your app has been uninstalled.
 
     	// Create the storage directory if it does not exist
     	if (! mediaStorageDir.exists()){
@@ -179,18 +156,26 @@ public class MainActivity extends Activity {
   	        }
   	    }
     		    
-       // Create a media file name
+       // Create file name
        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date(type));
        File mediaFile;
     		   
        if (type == MEDIA_TYPE_IMAGE){
-   	        mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_"+ timeStamp + ".jpg");
+   	        mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_"+ timeStamp + fileCount + ".jpg");
+   	        Log.d("FILE", "newfile");
        } else {
    	        return null;
        }
-
   	   return mediaFile;
    	}
+    
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri contentUri = Uri.fromFile(getOutputMediaFile(MEDIA_TYPE_IMAGE));
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+        Toast.makeText(getApplicationContext(), "galleryAddPic", Toast.LENGTH_SHORT).show();
+    }
 }
 
     
