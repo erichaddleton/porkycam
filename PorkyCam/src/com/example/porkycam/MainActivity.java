@@ -79,6 +79,11 @@ public class MainActivity extends Activity {
         }
     }
     
+    protected void onPause() {
+        super.onPause();
+        releaseCamera();              // release the camera immediately on pause event
+    }
+    
     private PictureCallback mPicture = new PictureCallback() {
 		@Override
 	    public void onPictureTaken(byte[] data, Camera camera) {
@@ -140,7 +145,15 @@ public class MainActivity extends Activity {
    		}
     	Log.d("TIMER", "timer canceled");
     	mTimerTask.cancel();
+    	nCounter = 0;
     			
+    }
+    
+    private void releaseCamera(){
+        if (mCamera != null){
+            mCamera.release();        // release the camera for other applications
+            mCamera = null;
+        }
     }
     
     public void shootSound() {
