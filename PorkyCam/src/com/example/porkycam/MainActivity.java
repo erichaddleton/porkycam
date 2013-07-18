@@ -1,8 +1,9 @@
 package com.example.porkycam;
 
 import java.io.File;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,7 +38,7 @@ public class MainActivity extends Activity {
 	public static int fileCount = 0;
 	MediaPlayer _shootMP = null;
 	private Camera mCamera;
-	
+	File mediaFile;
 	
 	
 	@Override
@@ -81,8 +82,24 @@ public class MainActivity extends Activity {
     private PictureCallback mPicture = new PictureCallback() {
 		@Override
 	    public void onPictureTaken(byte[] data, Camera camera) {
-			Toast.makeText(getApplicationContext(), "picture taken", Toast.LENGTH_SHORT).show();
-	        galleryAddPic();
+			File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "PorkyCam");
+			try{
+				mediaFile = new File(mediaStorageDir.getPath() + File.separator + "PORK_" + fileCount + ".jpg");
+				Log.d("FILE", "newfile");			
+				FileOutputStream outStream = null;
+				Toast.makeText(getApplicationContext(), "picture taken", Toast.LENGTH_SHORT).show();
+				outStream = new FileOutputStream(mediaFile);
+				outStream.write(data);
+				outStream.close();
+				Log.d("onPictureTaken - wrote bytes: " + data.length, null, null);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+			}
+			Log.d("onPictureTaken - jpeg", null, null);
+			galleryAddPic();
 	    }
 	};
    
@@ -138,40 +155,10 @@ public class MainActivity extends Activity {
     			_shootMP.start();
     	}
     }
-    		
-    public static final int MEDIA_TYPE_IMAGE = 1;
-   
-    
-
-    // Create a File for saving an image or video
-    private static File getOutputMediaFile(int type){
-  
-    	File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "PorkyCam");
-
-    	// Create the storage directory if it does not exist
-    	if (! mediaStorageDir.exists()){
-    		if (! mediaStorageDir.mkdirs()){
-                Log.d("PorkyCam", "failed to create directory");
-   		            return null;
-  	        }
-  	    }
-    		    
-       // Create file name
-       String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date(type));
-       File mediaFile;
-    		   
-       if (type == MEDIA_TYPE_IMAGE){
-   	        mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_"+ timeStamp + fileCount + ".jpg");
-   	        Log.d("FILE", "newfile");
-       } else {
-   	        return null;
-       }
-  	   return mediaFile;
-   	}
     
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        Uri contentUri = Uri.fromFile(getOutputMediaFile(MEDIA_TYPE_IMAGE));
+        Uri contentUri = Uri.fromFile(mediaFile);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
         Toast.makeText(getApplicationContext(), "galleryAddPic", Toast.LENGTH_SHORT).show();
